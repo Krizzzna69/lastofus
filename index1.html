@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoCheckIn Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .dashboard-container {
+            background-color: #ffffff;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .header img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+            font-family: 'Arial', sans-serif;
+        }
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            margin: 30px 0;
+        }
+        .icon-grid {
+            margin-top: 200px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .icon-grid div {
+            width: 48%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .icon-grid img {
+            width: 50px;
+            height: 50px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .icon-grid span {
+            font-size: 16px;
+            color: #333;
+        }
+        .links-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+        .links-list li {
+            padding: 15px 0;
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-top: 1px solid #e0e0e0;
+        }
+        .links-list li:first-child {
+            border-top: none;
+        }
+        .links-list li:hover {
+            background-color: #f9f9f9;
+        }
+        .links-list li span {
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <img src="Group 33.png" alt="Home" >
+            <h2>GeoCheckIn</h2>
+        </div>
+        <div class="icon-grid">
+            <div>
+                <img src="Map pin.png" alt="Live LOC" onclick="redirectToLiveLocation()" >
+                <span>Live LOC</span>
+            </div>
+            <div>
+                <img src="contact-form 1.png" alt="My Activity" onclick="redirectTomyactivity()">
+                <span>My Activity</span>
+            </div>
+            <div>
+                <img src="remote-assistance 1.png" alt="Off-site">
+                <span>Off-site</span>
+            </div>
+            <div>
+                <img src="work-from-home 1.png" alt="WFH">
+                <span>WFH</span>
+            </div>
+        </div>
+        <ul class="links-list">
+            <li>
+                <span>Check Attendance Report</span>
+                <span>&#9658;</span>
+            </li>
+            <li>
+                <span>Employee Details</span>
+                <span>&#9658;</span>
+            </li>
+            <li>
+                <span>Login Page</span>
+                <span>&#9658;</span>
+            </li>
+        </ul>
+    </div>
+    <script>
+        function redirectToLiveLocation() {
+     window.location.href = 'livelocation.html';
+        }        
+        function redirectTomyactivity() {
+     window.location.href = 'Myactivity.html';
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            username = localStorage.getItem('username');
+            
+        });
+    </script>
+</body>
+</html>
