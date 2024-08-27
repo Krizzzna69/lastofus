@@ -87,30 +87,7 @@ app.post('/admin/login', (req, res) => {
 });
 
 // Admin Dashboard Data endpoint
-app.get('/admin/dashboard', async (req, res) => {
-  const { username } = req.query;
 
-  if (username !== adminCredentials.username) {
-    return res.json({ success: false, message: 'Unauthorized' });
-  }
-
-  try {
-    const users = await User.find({});
-    res.json({
-      success: true,
-      users: users.map(user => ({
-        username: user.username,
-        firstCheckInTime: user.firstCheckInTime,
-        lastCheckOutTime: user.lastCheckOutTime,
-        totalAttendance: user.attendance,
-        totalWorkingHours: formatTime(user.totalWorkingHours),
-        location: user.location ? `${user.location.lat}, ${user.location.lon}` : 'N/A' // Include location
-      }))
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
 
 app.get('/admin/offsite-requests', async (req, res) => {
   try {
