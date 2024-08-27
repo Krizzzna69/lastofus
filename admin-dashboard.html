@@ -64,25 +64,28 @@
 </table>
 
 <script>
-    function updateRequestStatus(username, isApproved) {
-    fetch('https://lastofus-dbww.onrender.com/admin/approve-request', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, isApproved }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Request status updated successfully');
-            location.reload(); // Reload the page to reflect changes
-        } else {
-            alert('Failed to update request status');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+    function updateRequestStatus(username, requestId, isApproved) {
+        fetch('https://lastofus-dbww.onrender.com/admin/approve-request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, requestId, isApproved }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Request status updated successfully');
+                location.reload(); // Reload the page to reflect changes
+            } else {
+                alert('Failed to update request status');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please check the console for details.');
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         fetch('https://lastofus-dbww.onrender.com/admin/offsite-requests')
@@ -100,9 +103,8 @@
                             <td>${request.currentLocation ? `${request.currentLocation.lat}, ${request.currentLocation.lon}` : 'Not Submitted'}</td>
                             <td>${request.isApproved === null ? 'Pending' : request.isApproved ? 'Approved' : 'Disapproved'}</td>
                             <td>
-                                <button class="btn btn-approve" onclick="updateRequestStatus('${request.username}', true)">Approve</button>
-                                <button class="btn btn-disapprove" onclick="updateRequestStatus('${request.username}', false)">Disapprove</button>
-
+                                <button class="btn btn-approve" onclick="updateRequestStatus('${request.username}', '${request.requestId}', true)">Approve</button>
+                                <button class="btn btn-disapprove" onclick="updateRequestStatus('${request.username}', '${request.requestId}', false)">Disapprove</button>
                             </td>
                         `;
                         requestsTable.appendChild(row);
