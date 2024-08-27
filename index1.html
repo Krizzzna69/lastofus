@@ -120,7 +120,7 @@
                 <span>My Activity</span>
             </div>
             <div>
-                <img src="remote-assistance 1.png" alt="Off-site">
+                <img src="remote-assistance 1.png" alt="Off-site" onclick="redirectoffsite()">
                 <span>Off-site</span>
             </div>
             <div>
@@ -144,6 +144,9 @@
         </ul>
     </div>
     <script>
+        function redirectoffsite(){
+            window.location.href='offsite.html';
+        }
         function redirectToLiveLocation() {
      window.location.href = 'livelocation.html';
         }        
