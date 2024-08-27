@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        #header{
+            padding-bottom: 20px;
+        }
         #attendanceTable {
             
             width: 100%;
@@ -23,6 +26,9 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="Group 33.png" alt="Home" onclick="redirecthome()" >
+    </div>
     <table id="attendanceTable">
         <thead>
             <tr>
@@ -37,6 +43,10 @@
         </tbody>
     </table>
     <script>
+
+function redirecthome(){
+        window.location.href = 'index1.html'
+    }
         document.addEventListener("DOMContentLoaded", () => {
             username = localStorage.getItem('username');
             

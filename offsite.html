@@ -69,9 +69,15 @@
             color: red;
             text-align: center;
         }
+        #header{
+            padding-bottom: 20px;
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="Group 33.png" alt="Home" onclick="redirecthome()" >
+    </div>
 
 <div class="container">
     <h2>Offsite Work Request</h2>
@@ -103,6 +109,9 @@
 </div>
 
 <script>
+    function redirecthome(){
+        window.location.href = 'index1.html'
+    }
     let map, userMarker;
     const username = localStorage.getItem('username');
     console.log(username);
