@@ -1,0 +1,1 @@
+const mongoDBUri = 'mongodb+srv://vijayalakshmicoffeenzdhkLopus5woO0uZDL:pj123@cluster0.sfe5q.mongodb.net/'
