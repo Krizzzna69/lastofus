@@ -104,9 +104,9 @@
         </div>
         
         <form id="signinForm">
-            <input type="text" id="email" name="email" placeholder="Your Institute Email ID" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <a href="#" style="display:block; text-align:right; margin-bottom: 20px;">Forgot Password?</a>
+            <input type="text" id="email" name="email"required>
+            <input type="password" id="password" name="password"required>
+            <p id="message"></p>
             <button type="submit">LOG IN</button>
         </form>
     </div>
@@ -129,7 +129,7 @@
                 const data = await response.json();
                 if (data.success) {
                     // Store email in localStorage
-                    localStorage.setItem('email', email);
+                    localStorage.setItem('username', email);
 
                     window.location.href = `index1.html`;
                 } else {
