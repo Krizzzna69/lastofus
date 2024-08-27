@@ -6,7 +6,7 @@
     <title>Document</title>
     <style>
         #attendanceTable {
-            display: none; /* Initially hidden */
+            
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
@@ -80,10 +80,10 @@
             const firstCheckIn = new Date(entry.firstCheckInTime).toLocaleString();
             const lastCheckOut = new Date(entry.lastCheckOutTime).toLocaleString();
 
-            row.insertCell().textContent = firstCheckIn || 'N/A';
-            row.insertCell().textContent = lastCheckOut || 'N/A';
-            row.insertCell().textContent = entry.totalAttendance || '0';
-            row.insertCell().textContent = entry.totalWorkingHours || '0';
+            row.insertCell().textContent = firstCheckIn;
+            row.insertCell().textContent = lastCheckOut;
+            row.insertCell().textContent = entry.totalAttendance;
+            row.insertCell().textContent = entry.totalWorkingHours;
         });
     } else {
         console.error('Attendance data is not an array:', attendance);
