@@ -108,10 +108,10 @@ app.get('/admin/offsite-requests', async (req, res) => {
 
 app.post('/admin/approve-request', async (req, res) => {
   try {
-    const { requestId, isApproved } = req.body;
+    const { username, isApproved } = req.body;
 
     // Find and update the offsite request
-    const request = await OffsiteRequest.findById(requestId);
+    const request = await OffsiteRequest.findById(username);
     if (!request) return res.status(404).json({ success: false, message: 'Request not found' });
 
     request.isApproved = isApproved;
