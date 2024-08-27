@@ -156,7 +156,7 @@
         return;
     }
 
-    fetch(`https://lastofus-dbww.onrender.com/check-approval-status?username=${username}`)
+    fetch(`https://lasthope-khuj.onrender.com/check-approval-status?username=${username}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -201,7 +201,7 @@ function submitOffsiteWork() {
         currentLocation: userMarker ? userMarker.getPosition().toJSON() : null
     };
 
-    fetch('https://lastofus-dbww.onrender.com/offsite-request', {
+    fetch('https://lasthope-khuj.onrender.com/offsite-request', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
