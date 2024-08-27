@@ -110,34 +110,27 @@ app.post('/admin/approve-request', async (req, res) => {
   try {
     const { username, requestId, isApproved } = req.body;
 
-    // Validate request data
-    if (!username || !requestId || isApproved === undefined) {
-      return res.status(400).json({ success: false, message: 'Invalid request data' });
+    if (!username || !requestId) {
+      return res.status(400).json({ success: false, message: 'Username and requestId are required' });
     }
 
-    // Find the user by username
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
+    // Find and update the offsite request
+    const request = await OffsiteRequest.findOneAndUpdate(
+      { _id: requestId, username: username },
+      { isApproved: isApproved },
+      { new: true } // Return the updated document
+    );
 
-    // Find the offsite request by requestId
-    const request = user.offsiteRequests.id(requestId);
     if (!request) {
       return res.status(404).json({ success: false, message: 'Request not found' });
     }
 
-    // Update the request status
-    request.isApproved = isApproved;
-    await user.save();
-
     res.json({ success: true, message: 'Request status updated successfully' });
   } catch (error) {
-    console.error('Error updating request status:', error);
+    console.error('Error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
 
 
 
