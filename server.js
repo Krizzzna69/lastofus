@@ -21,6 +21,7 @@ mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true }
 
 // Define a User schema with location and approval fields
 const offsiteRequestSchema = new mongoose.Schema({
+  username:String,
   fromTime: { type: Date, required: true },
   leavingTime: { type: Date, required: true },
   location: { type: String, required: true },

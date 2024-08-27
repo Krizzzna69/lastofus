@@ -194,10 +194,10 @@ function submitOffsiteWork() {
     }
 
     const offsiteData = {
+        username: localStorage.getItem('username'),
         fromTime,
         leavingTime,
-        location,
-        username: localStorage.getItem('username'),
+        location,  
         currentLocation: userMarker ? userMarker.getPosition().toJSON() : null
     };
 
