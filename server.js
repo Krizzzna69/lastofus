@@ -13,24 +13,20 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-const mongoDBUri = 'mongodb+srv://vijayalakshmicoffeenzdhkLopus5woO0uZDL:pj123@cluster0.sfe5q.mongodb.net/'
- // Replace 
+const mongoDBUri = 'mongodb+srv://pj123:skibidi@cluster0.1uxmx.mongodb.net/yourDatabaseName'; // Replace 'yourDatabaseName'
 mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Define a User schema with location and approval fields
 const offsiteRequestSchema = new mongoose.Schema({
-  username:String,
   fromTime: { type: Date, required: true },
   leavingTime: { type: Date, required: true },
   location: { type: String, required: true },
   submittedAt: { type: Date, default: Date.now },
   isApproved: { type: Boolean, default: null } // null = pending, true = approved, false = disapproved
 });
-
-const OffsiteRequest = mongoose.model('OffsiteRequest', offsiteRequestSchema);
-
+const OffsiteRequest = mongoose.model('OffsiteRequest', offsiteRequestSchema)
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -88,7 +84,58 @@ app.post('/admin/login', (req, res) => {
 });
 
 // Admin Dashboard Data endpoint
+app.get('/admin/dashboard', async (req, res) => {
+  const { username } = req.query;
 
+  if (username !== adminCredentials.username) {
+    return res.json({ success: false, message: 'Unauthorized' });
+  }
+
+  try {
+    const users = await User.find({});
+    res.json({
+      success: true,
+      users: users.map(user => ({
+        username: user.username,
+        firstCheckInTime: user.firstCheckInTime,
+        lastCheckOutTime: user.lastCheckOutTime,
+        totalAttendance: user.attendance,
+        totalWorkingHours: formatTime(user.totalWorkingHours),
+        location: user.location ? `${user.location.lat}, ${user.location.lon}` : 'N/A' // Include location
+      }))
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+app.get('/admin/offsite-requests', async (req, res) => {
+  try {
+    // Fetch users who have offsiteRequests
+    const users = await User.find({ 'offsiteRequests.0': { $exists: true } }).populate('offsiteRequests');
+
+    // Flatten and map the requests
+    const requests = users.flatMap(user => 
+      user.offsiteRequests.map(request => ({
+        username: user.username,
+        fromTime: request.fromTime,
+        leavingTime: request.leavingTime,
+        location: request.location,
+        isApproved: request.isApproved,
+        requestId: request._id
+      }))
+    );
+
+    res.json({ success: true, requests });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
+
+// Approve or disapprove a user
 app.post('/admin/approve-request', async (req, res) => {
   try {
       const { username, requestId, isApproved } = req.body;
@@ -114,38 +161,6 @@ app.post('/admin/approve-request', async (req, res) => {
       res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
-
-
-
-// Approve or disapprove a user
-
-app.post('/admin/approve-request', async (req, res) => {
-  try {
-    const { username, requestId, isApproved } = req.body;
-
-    if (!username || !requestId) {
-      return res.status(400).json({ success: false, message: 'Username and requestId are required' });
-    }
-
-    // Find and update the offsite request
-    const request = await OffsiteRequest.findOneAndUpdate(
-      { _id: requestId, username: username },
-      { isApproved: isApproved },
-      { new: true } // Return the updated document
-    );
-
-    if (!request) {
-      return res.status(404).json({ success: false, message: 'Request not found' });
-    }
-
-    res.json({ success: true, message: 'Request status updated successfully' });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
-
 
 
 // Sign In endpoint
