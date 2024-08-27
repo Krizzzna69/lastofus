@@ -114,7 +114,7 @@
     }
     let map, userMarker;
     const username = localStorage.getItem('username');
-    console.log(username);
+    
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -158,7 +158,7 @@
 
     function checkApprovalStatus() {
     // Fetch the username from local storage
-    const username = localStorage.getItem('username');
+    
     
     if (!username) {
         document.getElementById('errorMessage').textContent = 'Username not found';

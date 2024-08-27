@@ -104,31 +104,25 @@ app.get('/admin/offsite-requests', async (req, res) => {
 
 
 // Approve or disapprove a user
+
 app.post('/admin/approve-request', async (req, res) => {
   try {
-      const { username, requestId, isApproved } = req.body;
+    const { requestId, isApproved } = req.body;
 
-      const user = await User.findOne({ username });
+    // Find and update the offsite request
+    const request = await OffsiteRequest.findById(requestId);
+    if (!request) return res.status(404).json({ success: false, message: 'Request not found' });
 
-      if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
-      }
+    request.isApproved = isApproved;
+    await request.save();
 
-      const request = user.offsiteRequests.id(requestId);
-
-      if (!request) {
-          return res.status(404).json({ success: false, message: 'Request not found' });
-      }
-
-      request.isApproved = isApproved;
-      await user.save();
-
-      res.json({ success: true, message: 'Request status updated successfully' });
+    res.json({ success: true, message: 'Request status updated successfully' });
   } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 
 
 // Sign In endpoint
