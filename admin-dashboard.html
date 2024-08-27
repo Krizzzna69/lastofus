@@ -100,8 +100,9 @@
                             <td>${request.currentLocation ? `${request.currentLocation.lat}, ${request.currentLocation.lon}` : 'Not Submitted'}</td>
                             <td>${request.isApproved === null ? 'Pending' : request.isApproved ? 'Approved' : 'Disapproved'}</td>
                             <td>
-                                <button class="btn btn-approve" onclick="updateRequestStatus('${request.username}', '${request.requestId}', true)">Approve</button>
-                                <button class="btn btn-disapprove" onclick="updateRequestStatus('${request.username}', '${request.requestId}', false)">Disapprove</button>
+                                <button class="btn btn-approve" onclick="updateRequestStatus('${request.requestId}', true)">Approve</button>
+                                <button class="btn btn-disapprove" onclick="updateRequestStatus('${request.requestId}', false)">Disapprove</button>
+
                             </td>
                         `;
                         requestsTable.appendChild(row);
