@@ -66,12 +66,12 @@
 <script>
     function updateRequestStatus(username, requestId, isApproved) {
         fetch('https://lastofus-dbww.onrender.com/admin/approve-request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, requestId, isApproved }),
-        })
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, requestId, isApproved }),
+})
         .then(response => response.json())
         .then(data => {
             if (data.success) {

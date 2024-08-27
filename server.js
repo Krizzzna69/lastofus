@@ -89,15 +89,29 @@ app.post('/admin/login', (req, res) => {
 
 // Admin Dashboard Data endpoint
 
-app.get('/admin/offsite-requests', async (req, res) => {
+app.post('/admin/approve-request', async (req, res) => {
   try {
-    // Fetch all offsite requests
-    const requests = await OffsiteRequest.find().sort({ submittedAt: -1 });
+      const { username, requestId, isApproved } = req.body;
 
-    res.json({ success: true, requests });
+      const user = await User.findOne({ username });
+
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      const request = user.offsiteRequests.id(requestId);
+
+      if (!request) {
+          return res.status(404).json({ success: false, message: 'Request not found' });
+      }
+
+      request.isApproved = isApproved;
+      await user.save();
+
+      res.json({ success: true, message: 'Request status updated successfully' });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+      console.error('Error:', error);
+      res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
