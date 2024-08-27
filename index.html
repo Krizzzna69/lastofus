@@ -104,7 +104,7 @@
         </div>
         
         <form id="signinForm">
-            <input type="text" id="email" name="email"required>
+            <input type="text" id="username" name="email"required>
             <input type="password" id="password" name="password"required>
             <p id="message"></p>
             <button type="submit">LOG IN</button>
@@ -114,7 +114,7 @@
         document.getElementById('signinForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             try {
@@ -123,13 +123,13 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify({ username, password }),
                 });
 
                 const data = await response.json();
                 if (data.success) {
                     // Store email in localStorage
-                    localStorage.setItem('username', email);
+                    localStorage.setItem('username', username);
 
                     window.location.href = `index1.html`;
                 } else {
