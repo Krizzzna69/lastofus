@@ -13,7 +13,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-const mongoDBUri = 'mongodb+srv://vijayalakshmicoffeenzd:ohio2@cluster0.aj424.mongodb.net/' // Replace 
+const mongoDBUri = 'mongodb+srv://vijayalakshmicoffeenzdhkLopus5woO0uZDL:pj123@cluster0.sfe5q.mongodb.net/'
+ // Replace 
 mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
