@@ -61,17 +61,8 @@ const adminCredentials = {
   password: 'admin123' // Replace with your desired admin password
 };
 // Utility functions
-const convertTimeStringToSeconds = (timeString) => {
-  const [hours, minutes, seconds] = timeString.split(':').map(Number);
-  return hours * 3600 + minutes * 60 + seconds;
-};
 
-const formatTimeOnly = (date) => {
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  return `${hours}:${minutes}:${seconds}`;
-};
+
 
 const formatTime = (seconds) => {
   const hours = Math.floor(seconds / 3600);
@@ -239,7 +230,6 @@ app.post('/punch-in', async (req, res) => {
 });
 
 
-
 app.post('/punch-out', async (req, res) => {
   const { username } = req.body;
   
@@ -266,9 +256,11 @@ app.post('/punch-out', async (req, res) => {
     user.lastCheckOutTime = formattedDateTime;
 
     // Calculate total working hours
-    const punchInTime = new Date(user.punchInTime).getTime();
-    const punchOutTime = istTime.getTime();
-    const workingHours = (punchOutTime - punchInTime) / (1000 * 60 * 60); // Convert from milliseconds to hours
+    const firstCheckInTime = new Date(user.firstCheckInTime);
+    const lastCheckOutTime = new Date(user.lastCheckOutTime);
+
+    // Calculate the difference in milliseconds and convert to hours
+    const workingHours = (lastCheckOutTime - firstCheckInTime) / (1000 * 60 * 60);
     user.totalWorkingHours += workingHours;
 
     // Reset punchInTime to prevent multiple punch-outs
@@ -288,7 +280,6 @@ app.post('/punch-out', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
 
 
 
@@ -368,6 +359,40 @@ app.get('/check-approval-status', async (req, res) => {
   }
 });
 
+app.get('/attendance-data', async (req, res) => {
+  const { username, month, year } = req.query;
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'User not found' });
+    }
+
+    // Calculate the total days in the given month
+    const totalDays = new Date(year, month, 0).getDate(); // month is 1-based
+
+    // Get the attendance count for the month
+    const attendanceCount = await User.countDocuments({
+      username,
+      lastCheckInDate: {
+        $gte: `${year}-${month.padStart(2, '0')}-01`,
+        $lte: `${year}-${month.padStart(2, '0')}-${totalDays}`
+      }
+    });
+
+    res.json({
+      success: true,
+      data: {
+        attendance: attendanceCount,
+        totalDays: totalDays
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching attendance data:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 
 // Start server
