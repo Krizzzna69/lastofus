@@ -130,7 +130,7 @@
         </div>
         <ul class="links-list">
             <li>
-                <span>Check Attendance Report</span>
+                <span onclick="redirectpie()">Check Attendance Report</span>
                 <span>&#9658;</span>
             </li>
             <li>
@@ -140,6 +140,9 @@
         </ul>
     </div>
     <script>
+        function redirectpie(){
+            window.location.href='piechart.html';
+        }
         function redirectoffsite(){
             window.location.href='offsite.html';
         }
