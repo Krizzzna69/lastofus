@@ -197,7 +197,7 @@ function submitOffsiteWork() {
         fromTime,
         leavingTime,
         location,
-        username: localStorage.getItem('username'),
+        username: username,
         currentLocation: userMarker ? userMarker.getPosition().toJSON() : null
     };
 

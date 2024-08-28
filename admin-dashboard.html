@@ -64,13 +64,13 @@
 </table>
 
 <script>
-    function updateRequestStatus(username, requestId, isApproved) {
+    function updateRequestStatus(requestId, isApproved) {
         fetch('https://lastofus-dbww.onrender.com/admin/approve-request', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, requestId, isApproved }),
+            body: JSON.stringify({requestId, isApproved }),
         })
         .then(response => response.json())
         .then(data => {

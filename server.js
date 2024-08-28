@@ -153,6 +153,14 @@ app.post('/admin/approve-request', async (req, res) => {
       }
 
       request.isApproved = isApproved;
+
+      // Update the user's `isApproved` field
+      await user.updateOne({ 
+        $set: { "offsiteRequests.$[elem].isApproved": isApproved } 
+      }, {
+        arrayFilters: [{ "elem._id": requestId }]
+      });
+
       await user.save();
 
       res.json({ success: true, message: 'Request status updated successfully' });
