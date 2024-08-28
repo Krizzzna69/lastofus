@@ -13,7 +13,9 @@
     <script>
            
             username = localStorage.getItem('username');
-            
+            const username = username; // Replace with the actual username
+        const month = '08'; // Replace with the actual month (e.g., '08' for August)
+        const year = '2024'; // Replace with the actual year
      
         // Function to fetch attendance data from the backend
         async function fetchAttendanceData(username, month, year) {
@@ -46,9 +48,7 @@
         }
 
         // Example usage
-        const username = username; // Replace with the actual username
-        const month = '08'; // Replace with the actual month (e.g., '08' for August)
-        const year = '2024'; // Replace with the actual year
+        
 
         // Fetch and display the attendance data
         fetchAttendanceData(username, month, year);
