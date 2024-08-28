@@ -5,12 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Pie Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #header{
+            padding-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
+    <div class="header">
+        <img src="Group 33.png" alt="Home" onclick="redirecthome()" >
+    </div>
     <h2>Attendance Pie Chart for <span id="month-year"></span></h2>
     <canvas id="attendanceChart" width="400" height="400"></canvas>
 
     <script>
+            function redirecthome(){
+        window.location.href = 'index1.html'
+    }
         // Function to fetch attendance data from the backend
         async function fetchAttendanceData(username, month, year) {
             try {
