@@ -13,6 +13,82 @@
             align-items: center;
             justify-content: space-around;
         }
+        #buttonContainer {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 5;
+            
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+       
+        }
+        .action-button, #myActivityButton, #hideMapButton, #offsiteWorkButton, #onsiteWorkButton {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .action-button:hover, #myActivityButton:hover, #hideMapButton:hover {
+            background-color: #4a0dbd;
+        }
+        #footer {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+        }
+        #attendancePopup {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #6a11cb;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        #loggedInAs {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 5;
+            background-color: #6a11cb;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        /* Style for the table */
+        #attendanceTable {
+            display: none; /* Initially hidden */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #attendanceTable th, #attendanceTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        #attendanceTable th {
+            background-color: #6a11cb;
+            color: white;
+        }
+        #checkInButton,#checkOutButton{
+            top:100px;
+            display:none;
+        }
+
     </style>
 </head>
 <body>
@@ -20,6 +96,11 @@
         <img src="Group 33.png" alt="Home" onclick="redirecthome()" >
     </div>
     <div id="map"></div>
+    <div id="footer">
+        <button class="action-button" onclick="punchIn()">Check In</button>
+        <button class="action-button" onclick="punchOut()">Check Out</button>
+
+    </div>
 </body>
 <script>
     function redirecthome(){
