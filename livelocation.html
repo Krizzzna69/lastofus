@@ -212,60 +212,69 @@
         }
 
         function punchIn() {
-    if (!username) {
-        alert('Error: No username provided.');
-        return;
+        if (!username) {
+            alert('Error: No username provided.');
+            return;
+        }
+
+        const currentDate = new Date().toDateString();
+
+        if (hasPunchedInToday && currentDate === localStorage.getItem('lastPunchInDate')) {
+            alert('You have already punched in for today.');
+            return;
+        }
+
+        const punchInTime = new Date().getTime();
+
+        fetch('https://lastofus-dbww.onrender.com/punch-in', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, punchInTime }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Punched In at ' + new Date(punchInTime).toLocaleTimeString());
+                hasPunchedInToday = true;
+                localStorage.setItem('lastPunchInDate', currentDate);
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('An error occurred. Please try again.');
+        });
     }
 
-    const punchInTime = new Date().getTime();
-
-    fetch('https://lastofus-dbww.onrender.com/punch-in', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, punchInTime }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Punched In at ' + new Date(punchInTime).toLocaleTimeString());
-        } else {
-            alert('Error: ' + data.message);
+    function punchOut() {
+        if (!username) {
+            alert('Error: No username provided.');
+            return;
         }
-    })
-    .catch(error => {
-        alert('An error occurred. Please try again.');
-    });
-}
 
-        function punchOut() {
-            if (!username) {
-                alert('Error: No username provided.');
-                return;
+        const punchOutTime = new Date().getTime();
+
+        fetch('https://lastofus-dbww.onrender.com/punch-out', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, punchOutTime,hasPunchedInToday }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Punched Out at ' + new Date(punchOutTime).toLocaleTimeString());
+            } else {
+                alert('Error: ' + data.message);
             }
-
-            const punchOutTime = new Date().getTime();
-
-            fetch('https://lastofus-dbww.onrender.com/punch-out', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, punchOutTime }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Punched Out at ' + new Date(punchOutTime).toLocaleTimeString());
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                alert('An error occurred. Please try again.');
-            });
-        }
+        })
+        .catch(error => {
+            alert('An error occurred. Please try again.');
+        });
+    }
         window.initMap = initMap;
 </script>
 <script

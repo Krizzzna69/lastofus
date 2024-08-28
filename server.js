@@ -248,9 +248,7 @@ app.post('/punch-out', async (req, res) => {
     const formattedDateTime = istTime.toISOString().replace('T', ' ').substring(0, 19);
 
     // Check if the user has already punched out today
-    if (!user.punchInTime) {
-      return res.status(400).json({ success: false, message: 'No punch-in record found for today' });
-    }
+
 
     user.punchOutTime = formattedDateTime;
     user.lastCheckOutTime = formattedDateTime;
