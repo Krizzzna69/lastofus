@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-const mongoDBUri = 'mongodb+srv://pj123:skibidi@cluster0.1uxmx.mongodb.net/yourDatabaseName';// Replace 'yourDatabaseName'
+const mongoDBUri = 'mongodb+srv://pj123:skibidi@cluster0.1uxmx.mongodb.net/yourDatabaseName'; // Replace 'yourDatabaseName'
 mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
@@ -83,6 +83,7 @@ app.post('/admin/login', (req, res) => {
   }
 });
 
+// Admin Dashboard Data endpoint
 app.get('/admin/dashboard', async (req, res) => {
   const { username } = req.query;
 
@@ -120,7 +121,6 @@ app.get('/admin/offsite-requests', async (req, res) => {
         fromTime: request.fromTime,
         leavingTime: request.leavingTime,
         location: request.location,
-        currentLocation: request.currentLocation, // Include current location if available
         isApproved: request.isApproved,
         requestId: request._id
       }))
@@ -153,14 +153,6 @@ app.post('/admin/approve-request', async (req, res) => {
       }
 
       request.isApproved = isApproved;
-
-      // Update the user's `isApproved` field
-      await user.updateOne({ 
-        $set: { "offsiteRequests.$[elem].isApproved": isApproved } 
-      }, {
-        arrayFilters: [{ "elem._id": requestId }]
-      });
-
       await user.save();
 
       res.json({ success: true, message: 'Request status updated successfully' });
