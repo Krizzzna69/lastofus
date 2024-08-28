@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-const mongoDBUri = 'mongodb+srv://pj123:skibidi@cluster0.1uxmx.mongodb.net/yourDatabaseName'; // Replace 'yourDatabaseName'
+const mongoDBUri = 'mongodb+srv://pj123:skibidi@cluster0.1uxmx.mongodb.net/yourDatabaseName';// Replace 'yourDatabaseName'
 mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
@@ -83,7 +83,6 @@ app.post('/admin/login', (req, res) => {
   }
 });
 
-// Admin Dashboard Data endpoint
 app.get('/admin/dashboard', async (req, res) => {
   const { username } = req.query;
 
@@ -111,26 +110,28 @@ app.get('/admin/dashboard', async (req, res) => {
 
 app.get('/admin/offsite-requests', async (req, res) => {
   try {
-    // Fetch all offsite requests
-    const requests = await OffsiteRequest.find();
+    // Fetch users who have offsiteRequests
+    const users = await User.find({ 'offsiteRequests.0': { $exists: true } }).populate('offsiteRequests');
 
-    const formattedRequests = requests.map(request => ({
-      username: request.username,
-      fromTime: request.fromTime,
-      leavingTime: request.leavingTime,
-      location: request.location,
-      currentLocation: request.currentLocation,
-      isApproved: request.isApproved,
-      requestId: request._id
-    }));
+    // Flatten and map the requests
+    const requests = users.flatMap(user => 
+      user.offsiteRequests.map(request => ({
+        username: user.username,
+        fromTime: request.fromTime,
+        leavingTime: request.leavingTime,
+        location: request.location,
+        currentLocation: request.currentLocation, // Include current location if available
+        isApproved: request.isApproved,
+        requestId: request._id
+      }))
+    );
 
-    res.json({ success: true, requests: formattedRequests });
+    res.json({ success: true, requests });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
 
 
 

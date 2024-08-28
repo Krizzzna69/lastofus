@@ -65,7 +65,7 @@
 
 <script>
     function updateRequestStatus(username, requestId, isApproved) {
-        fetch('https://lastofus-dbww.onrender.com/admin/approve-request', {
+        fetch('https://yourserver.com/admin/approve-request', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +84,7 @@
         .catch(error => console.error('Error:', error));
     }
     document.addEventListener('DOMContentLoaded', function() {
-        fetch('https://lastofus-dbww.onrender.com/admin/offsite-requests')
+        fetch('https://yourserver.com/admin/offsite-requests')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
