@@ -11,15 +11,6 @@
     <canvas id="attendanceChart" width="400" height="400"></canvas>
 
     <script>
-           
-           document.addEventListener("DOMContentLoaded", () => {
-            username = localStorage.getItem('username');
-            
-        });
-        const username = username; // Replace with the actual username
-        const month = '08'; // Replace with the actual month (e.g., '08' for August)
-        const year = '2024'; // Replace with the actual year
-        console.log('username');
         // Function to fetch attendance data from the backend
         async function fetchAttendanceData(username, month, year) {
             try {
@@ -50,12 +41,22 @@
             }
         }
 
-        // Example usage
-        
+        // Wait for the DOM to be fully loaded before accessing DOM elements
+        document.addEventListener("DOMContentLoaded", () => {
+            // Retrieve username from localStorage
+            const username = localStorage.getItem('username');
 
-        // Fetch and display the attendance data
-        fetchAttendanceData(username, month, year);
+            // Replace with the actual month and year or get them from another source
+            const month = '08'; // Replace with the actual month (e.g., '08' for August)
+            const year = '2024'; // Replace with the actual year
 
+            if (username) {
+                // Fetch and display the attendance data
+                fetchAttendanceData(username, month, year);
+            } else {
+                console.error('Username not found in localStorage');
+            }
+        });
     </script>
 </body>
 </html>
