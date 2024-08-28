@@ -19,14 +19,23 @@ mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true }
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Define a User schema with location and approval fields
+
+
+// Admin credentials
+
+// Define OffsiteRequest schema
 const offsiteRequestSchema = new mongoose.Schema({
+  username: { type: String, required: true },
   fromTime: { type: Date, required: true },
   leavingTime: { type: Date, required: true },
   location: { type: String, required: true },
+  currentLocation: { lat: Number, lon: Number },
   submittedAt: { type: Date, default: Date.now },
   isApproved: { type: Boolean, default: null } // null = pending, true = approved, false = disapproved
 });
-const OffsiteRequest = mongoose.model('OffsiteRequest', offsiteRequestSchema)
+const OffsiteRequest = mongoose.model('OffsiteRequest', offsiteRequestSchema);
+
+// Define User schema with a reference to OffsiteRequest
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -37,12 +46,11 @@ const userSchema = new mongoose.Schema({
   lastCheckOutTime: String,
   totalWorkingHours: { type: Number, default: 0 },
   lastCheckInDate: String,
-  isApproved: { type: Boolean, default: false }, // New field to track admin approval status
+  isApproved: { type: Boolean, default: false },
   location: {
-      lat: Number,
-      lon: Number
-  },
-  offsiteRequests: [offsiteRequestSchema] // New field for offsite work requests
+    lat: Number,
+    lon: Number
+  }
 });
 
 const User = mongoose.model('User', userSchema);
@@ -52,7 +60,6 @@ const adminCredentials = {
   username: 'admin', // Replace with your desired admin username
   password: 'admin123' // Replace with your desired admin password
 };
-
 // Utility functions
 const convertTimeStringToSeconds = (timeString) => {
   const [hours, minutes, seconds] = timeString.split(':').map(Number);
@@ -111,21 +118,9 @@ app.get('/admin/dashboard', async (req, res) => {
 
 app.get('/admin/offsite-requests', async (req, res) => {
   try {
-    // Fetch users who have offsiteRequests
-    const users = await User.find({ 'offsiteRequests.0': { $exists: true } }).populate('offsiteRequests');
-
-    // Flatten and map the requests
-    const requests = users.flatMap(user => 
-      user.offsiteRequests.map(request => ({
-        username: user.username,
-        fromTime: request.fromTime,
-        leavingTime: request.leavingTime,
-        location: request.location,
-        isApproved: request.isApproved,
-        requestId: request._id
-      }))
-    );
-
+    // Fetch all offsite requests with corresponding user information
+    const requests = await OffsiteRequest.find().populate('username');
+    
     res.json({ success: true, requests });
   } catch (error) {
     console.error('Error:', error);
@@ -133,34 +128,26 @@ app.get('/admin/offsite-requests', async (req, res) => {
   }
 });
 
-
-
-// Approve or disapprove a user
+// Approve or disapprove a request
 app.post('/admin/approve-request', async (req, res) => {
   try {
-      const { username, requestId, isApproved } = req.body;
+    const { requestId, isApproved } = req.body;
 
-      const user = await User.findOne({ username });
+    const request = await OffsiteRequest.findById(requestId);
+    if (!request) {
+      return res.status(404).json({ success: false, message: 'Request not found' });
+    }
 
-      if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
-      }
+    request.isApproved = isApproved;
+    await request.save();
 
-      const request = user.offsiteRequests.id(requestId);
-
-      if (!request) {
-          return res.status(404).json({ success: false, message: 'Request not found' });
-      }
-
-      request.isApproved = isApproved;
-      await user.save();
-
-      res.json({ success: true, message: 'Request status updated successfully' });
+    res.json({ success: true, message: 'Request status updated successfully' });
   } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 
 
 // Sign In endpoint
@@ -350,7 +337,6 @@ app.post('/offsite-request', async (req, res) => {
   }
 });
 
-
 app.get('/check-approval-status', async (req, res) => {
   try {
     const username = req.query.username;
@@ -359,15 +345,8 @@ app.get('/check-approval-status', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Username is required' });
     }
 
-    // Find the user
-    const user = await User.findOne({ username }).populate('offsiteRequests');
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    // Find the latest offsite request
-    const latestRequest = user.offsiteRequests.sort((a, b) => b.submittedAt - a.submittedAt)[0];
+    // Fetch the latest offsite request for the given username
+    const latestRequest = await OffsiteRequest.findOne({ username }).sort({ submittedAt: -1 });
 
     if (!latestRequest) {
       return res.status(404).json({ success: false, message: 'No offsite request found' });
