@@ -131,27 +131,25 @@ app.get('/admin/offsite-requests', async (req, res) => {
 // Approve or disapprove a request
 app.post('/admin/approve-request', async (req, res) => {
   try {
-      const { username, requestId, isApproved } = req.body;
+    const { requestId } = req.body;
 
-      const user = await User.findOne({ username });
+    if (!requestId) {
+      return res.status(400).json({ success: false, message: 'Request ID is required' });
+    }
 
-      if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
-      }
+    const offsiteRequest = await OffsiteRequest.findById(requestId);
 
-      const request = user.offsiteRequests.id(requestId);
+    if (!offsiteRequest) {
+      return res.status(404).json({ success: false, message: 'Offsite request not found' });
+    }
 
-      if (!request) {
-          return res.status(404).json({ success: false, message: 'Request not found' });
-      }
+    offsiteRequest.isApproved = true; // Approve the request
+    await offsiteRequest.save();
 
-      request.isApproved = isApproved;
-      await user.save();
-
-      res.json({ success: true, message: 'Request status updated successfully' });
+    res.status(200).json({ success: true, message: 'Offsite request approved successfully' });
   } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Error approving request:', error);
+    res.status(500).json({ success: false, message: 'Failed to approve request' });
   }
 });
 
