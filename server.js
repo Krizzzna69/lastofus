@@ -383,7 +383,7 @@ app.get('/attendance-data', async (req, res) => {
     res.json({
       success: true,
       data: {
-        attendance: attendanceCount,
+        attendance: user.attendance,
         totalDays: totalDays
       }
     });
