@@ -106,7 +106,7 @@
     function redirecthome(){
         window.location.href = 'index1.html'
     }
-    let map, infoWindow, regionCircle, hasMarkedAttendance = false;
+    let map, infoWindow, regionCircle, hasPunchedInToday,hasMarkedAttendance = false;
         
         document.addEventListener("DOMContentLoaded", () => {
             username = localStorage.getItem('username');
@@ -249,32 +249,33 @@
     }
 
     function punchOut() {
-        if (!username) {
-            alert('Error: No username provided.');
-            return;
-        }
-
-        const punchOutTime = new Date().getTime();
-
-        fetch('https://lastofus-dbww.onrender.com/punch-out', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, punchOutTime,hasPunchedInToday }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Punched Out at ' + new Date(punchOutTime).toLocaleTimeString());
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(error => {
-            alert('An error occurred. Please try again.');
-        });
+    if (!username) {
+        alert('Error: No username provided.');
+        return;
     }
+
+    const punchOutTime = new Date().getTime();
+
+    fetch('https://lastofus-dbww.onrender.com/punch-out', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, punchOutTime }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Punched Out at ' + new Date(punchOutTime).toLocaleTimeString());
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('An error occurred. Please try again.');
+    });
+}
+
         window.initMap = initMap;
 </script>
 <script
