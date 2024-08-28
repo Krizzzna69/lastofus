@@ -121,6 +121,7 @@ app.get('/admin/offsite-requests', async (req, res) => {
         fromTime: request.fromTime,
         leavingTime: request.leavingTime,
         location: request.location,
+        currentLocation: request.currentLocation, // Include current location if available
         isApproved: request.isApproved,
         requestId: request._id
       }))
@@ -135,7 +136,7 @@ app.get('/admin/offsite-requests', async (req, res) => {
 
 
 
-// Approve or disapprove a user
+
 app.post('/admin/approve-request', async (req, res) => {
   try {
       const { username, requestId, isApproved } = req.body;
@@ -153,6 +154,14 @@ app.post('/admin/approve-request', async (req, res) => {
       }
 
       request.isApproved = isApproved;
+
+      // Update the user's `isApproved` field
+      await user.updateOne({ 
+        $set: { "offsiteRequests.$[elem].isApproved": isApproved } 
+      }, {
+        arrayFilters: [{ "elem._id": requestId }]
+      });
+
       await user.save();
 
       res.json({ success: true, message: 'Request status updated successfully' });
