@@ -11,6 +11,10 @@
     <canvas id="attendanceChart" width="400" height="400"></canvas>
 
     <script>
+                document.addEventListener("DOMContentLoaded", () => {
+            username = localStorage.getItem('username');
+            
+        });
         // Function to fetch attendance data from the backend
         async function fetchAttendanceData(username, month, year) {
             try {
@@ -42,12 +46,13 @@
         }
 
         // Example usage
-        const username = 'testUser'; // Replace with the actual username
+        const username = username; // Replace with the actual username
         const month = '08'; // Replace with the actual month (e.g., '08' for August)
         const year = '2024'; // Replace with the actual year
 
         // Fetch and display the attendance data
         fetchAttendanceData(username, month, year);
+
     </script>
 </body>
 </html>
