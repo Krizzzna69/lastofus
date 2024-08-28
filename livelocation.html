@@ -108,8 +108,11 @@
     }
     let map, infoWindow, regionCircle, hasMarkedAttendance = false;
         let hasPunchedOut = false;
-
-        let username = ''; // Store the username after login
+        document.addEventListener("DOMContentLoaded", () => {
+            username = localStorage.getItem('username');
+            
+        });
+         // Store the username after login
         const blueDotIcon = 'https://img.icons8.com/material-rounded/24/000000/marker.png'; // Replace with your blue dot URL
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
