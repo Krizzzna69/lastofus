@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-const mongoDBUri = 'mongodb+srv://vijayalakshmicoffeenzdhkLopus5woO0uZDL:pj123@cluster0.sfe5q.mongodb.net/test'; // Replace 'yourDatabaseName'
+const mongoDBUri = 'mongodb+srv://pj123:skibidi@cluster0.1uxmx.mongodb.net/yourDatabaseName'; // Replace 'yourDatabaseName'
 mongoose.connect(mongoDBUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
@@ -111,27 +111,26 @@ app.get('/admin/dashboard', async (req, res) => {
 
 app.get('/admin/offsite-requests', async (req, res) => {
   try {
-    // Fetch users who have offsiteRequests
-    const users = await User.find({ 'offsiteRequests.0': { $exists: true } }).populate('offsiteRequests');
+    // Fetch all offsite requests
+    const requests = await OffsiteRequest.find();
 
-    // Flatten and map the requests
-    const requests = users.flatMap(user => 
-      user.offsiteRequests.map(request => ({
-        username: user.username,
-        fromTime: request.fromTime,
-        leavingTime: request.leavingTime,
-        location: request.location,
-        isApproved: request.isApproved,
-        requestId: request._id
-      }))
-    );
+    const formattedRequests = requests.map(request => ({
+      username: request.username,
+      fromTime: request.fromTime,
+      leavingTime: request.leavingTime,
+      location: request.location,
+      currentLocation: request.currentLocation,
+      isApproved: request.isApproved,
+      requestId: request._id
+    }));
 
-    res.json({ success: true, requests });
+    res.json({ success: true, requests: formattedRequests });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+
 
 
 
