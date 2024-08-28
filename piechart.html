@@ -12,11 +12,14 @@
 
     <script>
            
+           document.addEventListener("DOMContentLoaded", () => {
             username = localStorage.getItem('username');
-            const username = username; // Replace with the actual username
+            
+        });
+        const username = username; // Replace with the actual username
         const month = '08'; // Replace with the actual month (e.g., '08' for August)
         const year = '2024'; // Replace with the actual year
-     
+        console.log('username');
         // Function to fetch attendance data from the backend
         async function fetchAttendanceData(username, month, year) {
             try {
