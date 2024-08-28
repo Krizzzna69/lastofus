@@ -107,7 +107,7 @@
         window.location.href = 'index1.html'
     }
     let map, infoWindow, regionCircle, hasMarkedAttendance = false;
-        let hasPunchedOut = false;
+        
         document.addEventListener("DOMContentLoaded", () => {
             username = localStorage.getItem('username');
             
@@ -158,6 +158,7 @@
                         map.setCenter(pos);
 
                         // Check if user is within the defined region
+                        let hasPunchedOut = false;
                         const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
                             new google.maps.LatLng(pos.lat, pos.lng),
                             regionCircle.getCenter()
