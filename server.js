@@ -50,7 +50,10 @@ const userSchema = new mongoose.Schema({
   location: {
     lat: Number,
     lon: Number
-  }
+  },
+  department: String, // New field for department
+  idNumber: String,   // New field for ID number
+  position: String    // New field for position
 });
 
 const User = mongoose.model('User', userSchema);
@@ -280,7 +283,30 @@ app.post('/punch-out', async (req, res) => {
 });
 
 
+// Route to get employee details by username
+app.get('/employee-details/:username', async (req, res) => {
+  try {
+      const { username } = req.params;
+      const employee = await User.findOne({ username });
 
+      if (!employee) {
+          return res.status(404).json({ message: 'Employee not found' });
+      }
+
+      // Send only the relevant employee details
+      const employeeDetails = {
+          idNumber: employee.idNumber,
+          username: employee.username,
+          department: employee.department,
+          position: employee.position,
+          attendance: employee.attendance,
+      };
+
+      res.status(200).json(employeeDetails);
+  } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
+  }
+});
 
 
 // Get Attendance endpoint

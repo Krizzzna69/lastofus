@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #6a11cb;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        #header{
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="Group 33.png" alt="Home" onclick="redirecthome()" >
+    </div>
+
+    <div class="container">
+        <h1>Employee Details</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Username</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                <!-- Employee details will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+            function redirecthome(){
+        window.location.href = 'index1.html'
+    }
+        document.addEventListener("DOMContentLoaded", () => {
+            username = localStorage.getItem('username');
+            
+        });
+        // Sample data fetching function
+        function fetchEmployeeDetails() {
+            fetch(`https://lastofus-dbww.onrender.com/employee-details/${username}`) // Replace with your actual API endpoint
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('employeeTableBody');
+                    data.forEach(employee => {
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${employee.idNumber}</td>
+                            <td>${employee.username}</td>
+                            <td>${employee.department}</td>
+                            <td>${employee.position}</td>
+                            <td>${employee.attendance}</td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching employee details:', error));
+        }
+
+        // Fetch employee details on page load
+        document.addEventListener('DOMContentLoaded', fetchEmployeeDetails);
+    </script>
+</body>
+</html>
