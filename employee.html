@@ -80,26 +80,30 @@
         });
         // Sample data fetching function
         function fetchEmployeeDetails() {
-            fetch(`https://lastofus-dbww.onrender.com/employee-details/${username}`) // Replace with your actual API endpoint
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById('employeeTableBody');
-                    data.forEach(employee => {
-                        const row = document.createElement('tr');
-                        
-                        row.innerHTML = `
-                            <td>${employee.idNumber}</td>
-                            <td>${employee.username}</td>
-                            <td>${employee.department}</td>
-                            <td>${employee.position}</td>
-                            <td>${employee.attendance}</td>
-                        `;
-                        
-                        tableBody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error fetching employee details:', error));
-        }
+    const username = localStorage.getItem('username'); // Assuming username is stored in localStorage
+    if (!username) {
+        console.error('No username found in localStorage');
+        return;
+    }
+
+    fetch(`https://lastofus-dbww.onrender.com/employee-details/${username}`) // Replace with your actual API endpoint
+        .then(response => response.json())
+        .then(employee => {
+            const tableBody = document.getElementById('employeeTableBody');
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${employee.idNumber}</td>
+                <td>${employee.username}</td>
+                <td>${employee.department}</td>
+                <td>${employee.position}</td>
+                <td>${employee.attendance}</td>
+            `;
+            
+            tableBody.appendChild(row);
+        })
+        .catch(error => console.error('Error fetching employee details:', error));
+}
 
         // Fetch employee details on page load
         document.addEventListener('DOMContentLoaded', fetchEmployeeDetails);
