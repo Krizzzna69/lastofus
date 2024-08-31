@@ -122,7 +122,7 @@
         const blueDotIcon = 'https://img.icons8.com/material-rounded/24/000000/marker.png'; // Replace with your blue dot URL
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 16.66336208491439, lng: 80.73772277996035 },
+                center: { lat: 16.79076487697725, lng:80.84678917870635, },
                 zoom: 15,
             });
             infoWindow = new google.maps.InfoWindow();
@@ -138,7 +138,7 @@
                 fillOpacity: 0.35,
                 map,
                 center: regionCenter,
-                radius: 20,
+                radius: 50,
             });
 
             // Create a marker to represent the user's current location
