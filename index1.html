@@ -122,6 +122,9 @@
     </style>
 </head>
 <body>
+    <div id="attendancePopup">
+        Attendance Marked
+    </div>
     <div id="map"></div>
     <div class="dashboard-container">
         <div class="header">
@@ -277,12 +280,14 @@
         
 
         function showAttendanceMarkedPopup() {
-            const popup = document.getElementById("attendancePopup");
-            popup.style.display = "block";
-            setTimeout(() => {
-                popup.style.display = "none";
-            }, 2000);
-        }
+    const popup = document.getElementById("attendancePopup");
+    if (popup) {
+        popup.style.display = "block";
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 3000);
+    }
+}
 
         function punchIn() {
         if (!username) {
@@ -349,7 +354,7 @@
     });
 }
 
-        initMap();
+    initMap();
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASAMgt4KkC1Hr4bbf8A8JBGwAcpwlAv6o&callback=initMap&v=weekly&libraries=geometry"
