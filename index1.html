@@ -166,6 +166,7 @@
             username = localStorage.getItem('username');
             
         });
+
         let map, infoWindow, regionCircle, hasPunchedInToday,hasMarkedAttendance = false;
         
         document.addEventListener("DOMContentLoaded", () => {
@@ -336,7 +337,7 @@
     });
 }
 
-        window.initMap = initMap;
+        initMap();
     </script>
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASAMgt4KkC1Hr4bbf8A8JBGwAcpwlAv6o&callback=initMap&v=weekly&libraries=geometry"
