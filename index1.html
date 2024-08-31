@@ -164,7 +164,7 @@
         }
         document.addEventListener("DOMContentLoaded", () => {
             username = localStorage.getItem('username');
-            initMap();
+            window.initMap = initMap;
             
         });
 
